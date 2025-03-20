@@ -754,24 +754,22 @@ body {
 .staking-button:hover {
     background-color: #5e81ac;
 }
-/* Стили для модального окна */
-/* Стили для модального окна */
 /* Стили для модальных окон */
 /* Стили для модальных окон */
 .dialog {
-    display: none;
+    display: none; /* Скрыто по умолчанию */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: #3b4252;
+    background-color: #3b4252 !important;
     border-radius: 15px;
     padding: 20px;
     width: auto; /* Ширина будет адаптироваться под содержимое */
-    min-width: 400px; /* Минимальная ширина */
-    max-width: 90%; /* Максимальная ширина */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    min-width: 400px !important; /* Минимальная ширина */
+    max-width: 90% !important; /* Максимальная ширина */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2) !important;;
+    z-index: 1000; /* Чтобы окно было поверх других элементов */
 }
 
 .dialog-content {
@@ -782,6 +780,7 @@ body {
 .dialog h3 {
     margin-bottom: 20px;
     color: white;
+    font-size: 24px; /* Увеличиваем размер заголовка */
 }
 
 .payment-option {
@@ -808,6 +807,7 @@ body {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s;
 }
 
 .close:hover {
@@ -823,11 +823,36 @@ body {
     margin: 10px 0; /* Отступы */
     font-size: 14px; /* Размер текста */
     color: #d8dee9; /* Цвет текста */
+    padding: 10px;
+    background-color: #434c5e; /* Фон для адреса */
+    border-radius: 10px;
+    cursor: pointer; /* Курсор указывает, что текст можно копировать */
 }
 
 #walletAddress span {
     font-weight: bold;
     color: white;
+}
+
+/* Адаптивность для модальных окон */
+@media (max-width: 600px) {
+    .dialog {
+        min-width: 300px; /* Уменьшаем минимальную ширину для мобильных устройств */
+        padding: 15px; /* Уменьшаем отступы */
+    }
+
+    .dialog h3 {
+        font-size: 20px; /* Уменьшаем размер заголовка */
+    }
+
+    .payment-option {
+        font-size: 14px; /* Уменьшаем размер текста кнопок */
+        padding: 10px;
+    }
+
+    #walletAddress {
+        font-size: 12px; /* Уменьшаем размер текста адреса */
+    }
 }
 /* Стили для верхней панели */
 .top-bar {
