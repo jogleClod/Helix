@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Регистрация</title>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -14,6 +15,7 @@
                 <source src="assets/video.mp4" type="video/mp4">
                 Ваш браузер не поддерживает видео.
             </video>
+            <div class="videoOverlay"></div> <!-- Затемнение для видео -->
         </div>
 
         <!-- Форма регистрации -->
@@ -23,11 +25,27 @@
                 <input class="input" type="text" id="registerUsername" placeholder="Логин" required>
                 <input class="input" type="email" id="registerEmail" placeholder="Почта" required>
                 <input class="input" type="password" id="registerPassword" placeholder="Пароль" required>
+                <div id="registerError" class="error-message"></div> <!-- Блок для ошибок регистрации -->
                 <button class="button" type="submit">Зарегистрироваться</button>
-                <p>Уже есть аккаунт? <a href="home.html">Войти</a></p>
+                <p>Уже есть аккаунт? <a href="#" id="showLoginForm">Войти</a></p>
             </form>
         </div>
     </div>
+
+    <!-- Модальное окно для входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Вход</h2>
+            <form class="form" onsubmit="return loginUser()">
+                <input class="input" type="text" id="loginUsername" placeholder="Логин" required>
+                <input class="input" type="password" id="loginPassword" placeholder="Пароль" required>
+                <div id="loginError" class="error-message"></div> <!-- Блок для ошибок входа -->
+                <button class="button" type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+
     <script src="js/script.js"></script>
 </body>
 </html>

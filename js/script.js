@@ -16,11 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
     // Проверяем, авторизован ли пользователь (только на странице home.html)
     if (window.location.pathname.endsWith("home.html")) {
         const user = JSON.parse(localStorage.getItem("user"));
-        if (user) {
-            // Пользователь авторизован, ничего не делаем
-        } else {
-            // Пользователь не авторизован, перенаправляем на страницу входа
-            window.location.href = "index.html";
+        if (!user) {
+            window.location.href = "index.html"; // Перенаправляем на страницу входа
         }
     }
 
@@ -42,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (user) {
                 window.location.href = "profile.html"; // Перенаправляем на страницу профиля
             } else {
-                alert("Сначала войдите в систему!");
+                showToast("Сначала войдите в систему!");
                 window.location.href = "index.html"; // Перенаправляем на страницу входа
             }
         });
@@ -111,7 +108,10 @@ function loadCryptoChart(coinId, chartId, borderColor) {
                 },
             });
         })
-        .catch((error) => console.error("Ошибка загрузки данных:", error));
+        .catch((error) => {
+            console.error("Ошибка загрузки данных:", error);
+            showToast("Не удалось загрузить данные о криптовалютах.");
+        });
 }
 
 // Функция для проверки пароля
@@ -143,28 +143,28 @@ function registerUser() {
     const password = document.getElementById("registerPassword").value.trim();
 
     if (!username || !email || !password) {
-        alert("Заполните все поля!");
+        showToast("Заполните все поля!");
         return;
     }
 
     // Проверяем пароль
     const passwordError = validatePassword(password);
     if (passwordError) {
-        alert(passwordError);
+        showToast(passwordError);
         return;
     }
 
     // Проверяем, существует ли пользователь
     const existingUser = JSON.parse(localStorage.getItem("user"));
     if (existingUser && existingUser.username === username) {
-        alert("Пользователь с таким логином уже существует!");
+        showToast("Пользователь с таким логином уже существует!");
         return;
     }
 
     // Сохраняем пользователя в localStorage
     const user = { username, email, password };
     localStorage.setItem("user", JSON.stringify(user));
-    alert("Регистрация прошла успешно!");
+    showToast("Регистрация прошла успешно!");
     window.location.href = "home.html"; // Перенаправляем на страницу входа
 }
 
@@ -174,17 +174,17 @@ function loginUser() {
     const password = document.getElementById("loginPassword").value.trim();
 
     if (!username || !password) {
-        alert("Заполните все поля!");
+        showToast("Заполните все поля!");
         return;
     }
 
     // Проверяем данные пользователя
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.username === username && user.password === password) {
-        alert(`Добро пожаловать, ${username}!`);
+        showToast(`Добро пожаловать, ${username}!`);
         window.location.href = "home.html"; // Перенаправляем на главную страницу
     } else {
-        alert("Неверный логин или пароль!");
+        showToast("Неверный логин или пароль!");
     }
 }
 
@@ -199,7 +199,7 @@ function loadProfile() {
             <p><strong>Почта:</strong> ${user.email}</p>
         `;
     } else {
-        alert("Пользователь не авторизован!");
+        showToast("Пользователь не авторизован!");
         window.location.href = "index.html"; // Перенаправляем на страницу входа
     }
 }
@@ -207,16 +207,9 @@ function loadProfile() {
 // Функция для выхода
 function logout() {
     localStorage.removeItem("user");
-    alert("Вы успешно вышли из системы.");
+    showToast("Вы успешно вышли из системы.");
     window.location.href = "index.html"; // Перенаправляем на страницу входа
-}   
-document.addEventListener("DOMContentLoaded", function () {
-    // Загружаем данные о криптовалютах
-    loadCryptoData();
-
-    // Загружаем новости (если нужно)
-    loadNews();
-});
+}
 
 // Функция для загрузки данных о криптовалютах
 function loadCryptoData() {
@@ -232,7 +225,7 @@ function loadCryptoData() {
         })
         .catch((error) => {
             console.error("Ошибка загрузки данных:", error);
-            alert("Не удалось загрузить данные о криптовалютах.");
+            showToast("Не удалось загрузить данные о криптовалютах.");
         });
 }
 
@@ -265,4 +258,193 @@ function loadNews() {
     if (newsElement) {
         newsElement.textContent = "Криптовалютный рынок продолжает расти.";
     }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    // Открытие модального окна для входа
+    const showLoginForm = document.getElementById("showLoginForm");
+    const loginModal = document.getElementById("loginModal");
+    const closeButton = document.querySelector(".close-button");
+
+    if (showLoginForm && loginModal) {
+        showLoginForm.addEventListener("click", function (e) {
+            e.preventDefault(); // Отменяем переход по ссылке
+            loginModal.classList.add("show"); // Показываем модальное окно
+        });
+    }
+
+    // Закрытие модального окна
+    if (closeButton && loginModal) {
+        closeButton.addEventListener("click", function () {
+            loginModal.classList.remove("show"); // Скрываем модальное окно
+        });
+    }
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener("click", function (e) {
+        if (e.target === loginModal) {
+            loginModal.classList.remove("show");
+        }
+    });
+
+    // Обработка входа
+    const loginForm = document.querySelector("#loginModal .form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            loginUser();
+        });
+    }
+});
+
+// Функция для входа
+function loginUser() {
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    if (!username || !password) {
+        showToast("Заполните все поля!");
+        return;
+    }
+
+    // Проверяем данные пользователя
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.username === username && user.password === password) {
+        showToast(`Добро пожаловать, ${username}!`);
+        setTimeout(() => {
+            window.location.href = "home.html"; // Перенаправляем на главную страницу
+        }, 2000);
+    } else {
+        showToast("Неверный логин или пароль!");
+    }
+}
+document.addEventListener("DOMContentLoaded", function () {
+    // Открытие модального окна для входа
+    const showLoginForm = document.getElementById("showLoginForm");
+    const loginModal = document.getElementById("loginModal");
+    const closeButton = document.querySelector(".close-button");
+
+    if (showLoginForm && loginModal) {
+        showLoginForm.addEventListener("click", function (e) {
+            e.preventDefault(); // Отменяем переход по ссылке
+            loginModal.classList.add("show"); // Показываем модальное окно
+        });
+    }
+
+    // Закрытие модального окна
+    if (closeButton && loginModal) {
+        closeButton.addEventListener("click", function () {
+            loginModal.classList.remove("show"); // Скрываем модальное окно
+        });
+    }
+
+    // Закрытие модального окна при клике вне его
+    window.addEventListener("click", function (e) {
+        if (e.target === loginModal) {
+            loginModal.classList.remove("show");
+        }
+    });
+
+    // Обработка регистрации
+    const registerForm = document.querySelector("#registerForm .form");
+    if (registerForm) {
+        registerForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            registerUser();
+        });
+    }
+
+    // Обработка входа
+    const loginForm = document.querySelector("#loginModal .form");
+    if (loginForm) {
+        loginForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            loginUser();
+        });
+    }
+});
+
+// Функция для регистрации
+function registerUser() {
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value.trim();
+    const errorElement = document.getElementById("registerError");
+
+    // Очищаем предыдущие ошибки
+    errorElement.textContent = "";
+
+    if (!username || !email || !password) {
+        errorElement.textContent = "Заполните все поля!";
+        return;
+    }
+
+    // Проверка email
+    if (!email.includes("@")) {
+        errorElement.textContent = "Пожалуйста, введите корректный email.";
+        return;
+    }
+
+    // Проверяем пароль
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+        errorElement.textContent = passwordError;
+        return;
+    }
+
+    // Проверяем, существует ли пользователь
+    const existingUser = JSON.parse(localStorage.getItem("user"));
+    if (existingUser && existingUser.username === username) {
+        errorElement.textContent = "Пользователь с таким логином уже существует!";
+        return;
+    }
+
+    // Сохраняем пользователя в localStorage
+    const user = { username, email, password };
+    localStorage.setItem("user", JSON.stringify(user));
+    window.location.href = "home.html"; // Перенаправляем на главную страницу
+}
+
+// Функция для входа
+function loginUser() {
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+    const errorElement = document.getElementById("loginError");
+
+    // Очищаем предыдущие ошибки
+    errorElement.textContent = "";
+
+    if (!username || !password) {
+        errorElement.textContent = "Заполните все поля!";
+        return;
+    }
+
+    // Проверяем данные пользователя
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.username === username && user.password === password) {
+        window.location.href = "home.html"; // Перенаправляем на главную страницу
+    } else {
+        errorElement.textContent = "Неверный логин или пароль!";
+    }
+}
+
+// Функция для проверки пароля
+function validatePassword(password) {
+    const minLength = 5;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    if (password.length < minLength) {
+        return "Пароль должен содержать минимум 5 символов.";
+    }
+    if (!hasUpperCase) {
+        return "Пароль должен содержать хотя бы одну заглавную букву.";
+    }
+    if (!hasNumber) {
+        return "Пароль должен содержать хотя бы одну цифру.";
+    }
+    if (!hasSpecialChar) {
+        return "Пароль должен содержать хотя бы один специальный символ (!@#$%^&*).";
+    }
+    return null; // Пароль валиден
 }
