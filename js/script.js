@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Загружаем данные о криптовалютах
+    loadCryptoData();
+
     // Загружаем графики, если они есть на странице
     if (document.getElementById("btcChart")) {
         loadCryptoChart("bitcoin", "btcChart", "#f7931a"); // Bitcoin
@@ -12,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById("adaChart")) {
         loadCryptoChart("cardano", "adaChart", "#0d1e30"); // Cardano
     }
-
     // Проверяем, авторизован ли пользователь (только на странице home.html)
     if (window.location.pathname.endsWith("home.html")) {
         const user = JSON.parse(localStorage.getItem("user"));
@@ -213,7 +215,7 @@ function logout() {
 
 // Функция для загрузки данных о криптовалютах
 function loadCryptoData() {
-    const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,cardano";
+    const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,binancecoin,cardano";
 
     fetch(apiUrl)
         .then((response) => response.json())
@@ -221,6 +223,7 @@ function loadCryptoData() {
             // Обновляем карточки с данными
             updateCard("btcCard", data.find((coin) => coin.id === "bitcoin"));
             updateCard("ethCard", data.find((coin) => coin.id === "ethereum"));
+            updateCard("bnbCard", data.find((coin) => coin.id === "binancecoin"));
             updateCard("adaCard", data.find((coin) => coin.id === "cardano"));
         })
         .catch((error) => {

@@ -755,32 +755,33 @@ body {
     background-color: #5e81ac;
 }
 /* Стили для модального окна */
+/* Стили для модального окна */
+/* Стили для модальных окон */
+/* Стили для модальных окон */
 .dialog {
-    display: none; /* Скрыто по умолчанию */
+    display: none;
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Чтобы окно было поверх других элементов */
-}
-
-.dialog-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #3b4252;
     border-radius: 15px;
     padding: 20px;
-    width: 300px;
-    text-align: center;
+    width: auto; /* Ширина будет адаптироваться под содержимое */
+    min-width: 400px; /* Минимальная ширина */
+    max-width: 90%; /* Максимальная ширина */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }
 
-.dialog-content h3 {
-    font-size: 20px;
-    color: white;
+.dialog-content {
+    text-align: center;
+    width: 100%; /* Ширина контента на 100% */
+}
+
+.dialog h3 {
     margin-bottom: 20px;
+    color: white;
 }
 
 .payment-option {
@@ -812,18 +813,16 @@ body {
 .close:hover {
     color: white;
 }
+
+/* Стили для адреса кошелька */
 #walletAddress {
-    font-size: 14px;
-    color: #d8dee9;
-    margin-bottom: 20px;
-    text-align: center;
-    max-width: 100%;
-    overflow-x: auto; /* Добавляем горизонтальную прокрутку */
-    white-space: nowrap; /* Запрещаем перенос текста */
-    padding: 10px;
-    background-color: #434c5e;
-    border-radius: 10px;
-    cursor: pointer; /* Курсор указывает, что текст можно копировать */
+    word-wrap: break-word; /* Перенос текста на новую строку */
+    white-space: normal; /* Разрешаем перенос слов */
+    max-width: 100%; /* Максимальная ширина */
+    overflow-wrap: break-word; /* Перенос длинных слов */
+    margin: 10px 0; /* Отступы */
+    font-size: 14px; /* Размер текста */
+    color: #d8dee9; /* Цвет текста */
 }
 
 #walletAddress span {

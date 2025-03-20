@@ -6,6 +6,75 @@
     <title>Кошелек</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Стили для центрирования и увеличения модальных окон */
+        .dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            max-width: 90%;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .dialog-content {
+            text-align: center;
+        }
+
+        .dialog h3 {
+            margin-bottom: 20px;
+        }
+
+        .dialog label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .dialog input, .dialog select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .dialog button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .dialog button:hover {
+            background-color: #45a049;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        /* Стили для сообщения об ошибке */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <!-- Верхняя панель -->
@@ -72,13 +141,82 @@
             <div class="wallet-section">
                 <h3><i class="fas fa-cogs"></i> Действия</h3>
                 <div class="actions">
-                    <button class="action-button"><i class="fas fa-plus"></i> Пополнить</button>
-                    <button class="action-button"><i class="fas fa-minus"></i> Вывести</button>
+                    <button class="action-button" id="depositButton">
+                        <i class="fas fa-plus"></i> Пополнить
+                    </button>
+                    <button class="action-button" id="withdrawButton">
+                        <i class="fas fa-minus"></i> Вывести
+                    </button>
                     <button class="action-button"><i class="fas fa-exchange-alt"></i> Обменять</button>
                 </div>
             </div>
         </div>
     </main>
+
+    <!-- Модальное окно для вывода средств -->
+    <div id="withdrawDialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close" onclick="closeWithdrawDialog()">&times;</span>
+            <h3>Вывод средств</h3>
+            <form id="withdrawForm">
+                <label for="currency">Криптовалюта:</label>
+                <select id="currency" required>
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="USDT">Tether (USDT)</option>
+                </select>
+
+                <label for="walletAddress">Адрес кошелька:</label>
+                <input type="text" id="walletAddress" placeholder="Введите адрес кошелька" required>
+
+                <label for="amount">Сумма:</label>
+                <input type="number" id="amount" placeholder="Введите сумму" required>
+
+                <p id="feeInfo">Комиссия: <span id="feeAmount">0.0005 BTC</span></p>
+
+                <!-- Сообщение об ошибке -->
+                <div id="errorMessage" class="error-message">Неверный адрес кошелька!</div>
+
+                <button type="submit" class="action-button">Подтвердить вывод</button>
+            </form>
+        </div>
+    </div>
+
+
+<!-- Модальное окно для выбора способа оплаты -->
+<div id="paymentDialog" class="dialog">
+    <div class="dialog-content">
+        <span class="close" onclick="closePaymentDialog()">&times;</span>
+        <h3>Выберите способ оплаты</h3>
+        <button class="payment-option" onclick="selectPayment('TRC20')">TRC20</button>
+        <button class="payment-option" onclick="selectPayment('ERC20')">ERC20</button>
+    </div>
+</div>
+
+<!-- Модальное окно для QR-кода и адреса кошелька -->
+<div id="qrDialog" class="dialog">
+    <div class="dialog-content">
+        <span class="close" onclick="closeQrDialog()">&times;</span>
+        <h3 id="qrDialogTitle">Оплата через TRC20</h3>
+        <div id="qrCode"></div>
+        <p id="walletAddress">Адрес кошелька: <span id="address"></span></p>
+        <button class="payment-option" onclick="closeQrDialog()">Закрыть</button>
+    </div>
+</div>
+
+    <!-- Модальное окно для подтверждения вывода -->
+    <div id="confirmationDialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close" onclick="closeConfirmationDialog()">&times;</span>
+            <h3>Подтверждение вывода</h3>
+            <p><strong>Криптовалюта:</strong> <span id="confirmCurrency"></span></p>
+            <p><strong>Адрес кошелька:</strong> <span id="confirmWalletAddress"></span></p>
+            <p><strong>Сумма:</strong> <span id="confirmAmount"></span></p>
+            <p><strong>Комиссия:</strong> <span id="confirmFee"></span></p>
+            <button onclick="proceedWithdrawal()">Подтвердить</button>
+            <button onclick="closeConfirmationDialog()">Отмена</button>
+        </div>
+    </div>
 
     <!-- Навигационная панель -->
     <nav class="navbar">
@@ -92,5 +230,183 @@
     </nav>
 
     <script src="js/script.js"></script>
+    <script>
+        // Открытие модального окна для вывода
+        document.getElementById('withdrawButton').addEventListener('click', function () {
+            document.getElementById('withdrawDialog').style.display = 'block';
+        });
+
+        // Закрытие модального окна для вывода
+        function closeWithdrawDialog() {
+            document.getElementById('withdrawDialog').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none'; // Скрываем сообщение об ошибке
+        }
+
+        // Закрытие модального окна подтверждения
+        function closeConfirmationDialog() {
+            document.getElementById('confirmationDialog').style.display = 'none';
+        }
+
+        // Валидация адреса кошелька
+        function validateWalletAddress(currency, address) {
+            if (currency === "BTC") {
+                return /^(1|3|bc1)[a-zA-Z0-9]{25,39}$/.test(address);
+            } else if (currency === "ETH") {
+                return /^0x[a-fA-F0-9]{40}$/.test(address);
+            }
+            return false;
+        }
+
+        // Расчет комиссии
+        function calculateFee(currency, amount) {
+            const fees = {
+                BTC: 0.0005,
+                ETH: 0.01,
+                USDT: 10
+            };
+            return fees[currency] || 0;
+        }
+
+        // Обработка формы вывода
+        document.getElementById('withdrawForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const currency = document.getElementById('currency').value;
+            const address = document.getElementById('walletAddress').value;
+            const amount = document.getElementById('amount').value;
+
+            if (!validateWalletAddress(currency, address)) {
+                // Показываем сообщение об ошибке
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            const fee = calculateFee(currency, amount);
+
+            // Заполнение данных в модальном окне подтверждения
+            document.getElementById('confirmCurrency').innerText = currency;
+            document.getElementById('confirmWalletAddress').innerText = address;
+            document.getElementById('confirmAmount').innerText = amount;
+            document.getElementById('confirmFee').innerText = fee;
+
+            // Открытие модального окна подтверждения
+            document.getElementById('confirmationDialog').style.display = 'block';
+        });
+
+        // Подтверждение вывода
+        function proceedWithdrawal() {
+            alert("Вывод успешно выполнен!");
+            closeConfirmationDialog();
+            closeWithdrawDialog();
+        }
+        // Пути к изображениям QR-кодов
+const qrImages = {
+    TRC20: 'assets/trc20.jpeg', // Путь к QR-коду для TRC20
+    ERC20: 'assets/erc20.jpeg', // Путь к QR-коду для ERC20
+};
+
+// Адреса кошельков для TRC20 и ERC20
+const walletAddresses = {
+    TRC20: 'TDiWeynXhV7tUGuHzR2mG8oxhXAZWrYsgx', // Пример адреса TRC20
+    ERC20: '0x57d537Dd7d32afeebFc9f1627A6f9494e3F651C6', // Пример адреса ERC20
+};
+
+// Функция для копирования текста в буфер обмена
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text)
+        .then(() => {
+            alert('Адрес скопирован в буфер обмена!');
+        })
+        .catch((error) => {
+            console.error('Ошибка при копировании:', error);
+            alert('Не удалось скопировать адрес.');
+        });
+}
+
+// Функция для показа модального окна с QR-кодом
+function showQrDialog(network) {
+    const qrDialog = document.getElementById('qrDialog');
+    const qrDialogTitle = document.getElementById('qrDialogTitle');
+    const walletAddress = document.getElementById('address');
+    const qrCodeContainer = document.getElementById('qrCode');
+
+    // Устанавливаем заголовок и адрес кошелька
+    qrDialogTitle.textContent = `Оплата через ${network}`;
+    walletAddress.textContent = walletAddresses[network];
+
+    // Очищаем контейнер для QR-кода
+    qrCodeContainer.innerHTML = '';
+
+    // Создаем элемент изображения QR-кода
+    const qrImage = document.createElement('img');
+    qrImage.src = qrImages[network]; // Устанавливаем путь к изображению
+    qrImage.alt = `QR-код для ${network}`;
+    qrImage.style.width = '200px'; // Размер QR-кода
+    qrImage.style.height = '200px';
+
+    // Добавляем изображение в контейнер
+    qrCodeContainer.appendChild(qrImage);
+
+    // Добавляем обработчик для копирования адреса
+    walletAddress.onclick = () => {
+        copyToClipboard(walletAddresses[network]);
+    };
+
+    // Показываем модальное окно
+    qrDialog.style.display = 'flex';
+}
+
+// Функция для закрытия модального окна с QR-кодом
+function closeQrDialog() {
+    const qrDialog = document.getElementById('qrDialog');
+    qrDialog.style.display = 'none'; // Скрываем модальное окно
+}
+
+// Функция для открытия модального окна выбора сети
+function openPaymentDialog() {
+    const dialog = document.getElementById('paymentDialog');
+    dialog.style.display = 'flex'; // Показываем модальное окно
+}
+
+// Функция для закрытия модального окна выбора сети
+function closePaymentDialog() {
+    const dialog = document.getElementById('paymentDialog');
+    dialog.style.display = 'none'; // Скрываем модальное окно
+}
+
+// Функция для выбора сети и показа QR-кода
+function selectPayment(network) {
+    closePaymentDialog(); // Закрываем окно выбора сети
+    showQrDialog(network); // Показываем окно с QR-кодом
+}
+
+// Назначаем обработчики событий после загрузки страницы
+document.addEventListener('DOMContentLoaded', () => {
+    // Обработчик для кнопки "Пополнить"
+    const depositButton = document.getElementById('depositButton');
+    if (depositButton) {
+        depositButton.addEventListener('click', openPaymentDialog);
+    }
+
+    // Обработчики для кнопок выбора сети
+    const trc20Button = document.getElementById('trc20Button');
+    const erc20Button = document.getElementById('erc20Button');
+    if (trc20Button) {
+        trc20Button.addEventListener('click', () => selectPayment('TRC20'));
+    }
+    if (erc20Button) {
+        erc20Button.addEventListener('click', () => selectPayment('ERC20'));
+    }
+
+    // Обработчики для закрытия модальных окон
+    const closeButtons = document.querySelectorAll('.close');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            closePaymentDialog();
+            closeQrDialog();
+        });
+    });
+});
+    </script>
 </body>
 </html>
