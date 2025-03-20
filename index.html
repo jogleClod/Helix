@@ -17,11 +17,12 @@
         </div>
 
         <!-- Форма регистрации -->
-        <div class="formContainer">
+        <div class="formContainer" id="registerForm">
             <form class="form" onsubmit="return registerUser()">
                 <h2>Регистрация</h2>
-                <input class="input" type="text" id="username" placeholder="Логин" required>
-                <input class="input" type="password" id="password" placeholder="Пароль" required>
+                <input class="input" type="text" id="registerUsername" placeholder="Логин" required>
+                <input class="input" type="email" id="registerEmail" placeholder="Почта" required>
+                <input class="input" type="password" id="registerPassword" placeholder="Пароль" required>
                 <button class="button" type="submit">Зарегистрироваться</button>
                 <p>Уже есть аккаунт? <a href="home.html">Войти</a></p>
             </form>

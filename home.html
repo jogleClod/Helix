@@ -9,14 +9,17 @@
 </head>
 <body>
     <!-- Верхняя панель -->
+    <!-- Верхняя панель -->
     <header class="top-bar">
         <div class="logo">
             <span>Helix</span> <!-- Текстовый логотип -->
         </div>
-        <div class="language-switcher">
-            <button id="languageButton">EN</button> <!-- Кнопка смены языка -->
+        <div class="actions">
+            <button id="languageButton">RU</button> <!-- Кнопка смены языка -->
+            <button id="profileButton"><i class="fas fa-user"></i></button> <!-- Иконка профиля -->
         </div>
     </header>
+</header>
 
     <!-- Основной контент -->
     <main class="main-content">
@@ -24,59 +27,58 @@
             <h2>Добро пожаловать!</h2>
             <p>Здесь вы можете узнать актуальную информацию о криптовалютах, рынках и многом другом.</p>
 
-            <!-- Карточки с новостями и графиками -->
-            <div class="cards-container">
-                <!-- Карточка 1: Bitcoin -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fab fa-bitcoin"></i>
-                        <h3>Bitcoin (BTC)</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="price">$50,000</p>
-                        <p class="change positive">+2.5% за 24ч</p>
-                        <p class="news">Bitcoin продолжает расти благодаря институциональным инвесторам.</p>
-                    </div>
-                </div>
+           <!-- Карточки с новостями и графиками -->
+<div class="cards-container">
+    <!-- Карточка 1: Bitcoin -->
+    <div class="card" id="btcCard">
+        <div class="card-header">
+            <i class="fab fa-bitcoin"></i>
+            <h3>Bitcoin (BTC)</h3>
+        </div>
+        <div class="card-body">
+            <p class="price">Загрузка...</p>
+            <p class="change">Загрузка...</p>
+            <p class="news">Загрузка новостей...</p>
+        </div>
+    </div>
 
-                <!-- Карточка 2: Ethereum -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fab fa-ethereum"></i>
-                        <h3>Ethereum (ETH)</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="price">$3,500</p>
-                        <p class="change negative">-1.2% за 24ч</p>
-                        <p class="news">Ethereum готовится к обновлению сети.</p>
-                    </div>
-                </div>
+    <!-- Карточка 2: Ethereum -->
+    <div class="card" id="ethCard">
+        <div class="card-header">
+            <i class="fab fa-ethereum"></i>
+            <h3>Ethereum (ETH)</h3>
+        </div>
+        <div class="card-body">
+            <p class="price">Загрузка...</p>
+            <p class="change">Загрузка...</p>
+            <p class="news">Загрузка новостей...</p>
+        </div>
+    </div>
 
-                <!-- Карточка 3: Cardano -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-chart-line"></i>
-                        <h3>Cardano (ADA)</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="price">$2.50</p>
-                        <p class="change positive">+3.8% за 24ч</p>
-                        <p class="news">Cardano запускает новые смарт-контракты.</p>
-                    </div>
-                </div>
+    <!-- Карточка 3: Cardano -->
+    <div class="card" id="adaCard">
+        <div class="card-header">
+            <i class="fas fa-chart-line"></i>
+            <h3>Cardano (ADA)</h3>
+        </div>
+        <div class="card-body">
+            <p class="price">Загрузка...</p>
+            <p class="change">Загрузка...</p>
+            <p class="news">Загрузка новостей...</p>
+        </div>
+    </div>
 
-                <!-- Карточка 4: Новости -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>Новости</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="news">Криптовалютный рынок достиг $2 трлн капитализации.</p>
-                        <p class="news">Binance запускает новые торговые пары.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- Карточка 4: Новости -->
+    <div class="card" id="newsCard">
+        <div class="card-header">
+            <i class="fas fa-newspaper"></i>
+            <h3>Новости</h3>
+        </div>
+        <div class="card-body">
+            <p class="news">Загрузка новостей...</p>
+        </div>
+    </div>
+</div>
         </div>
     </main>
 

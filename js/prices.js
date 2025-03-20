@@ -5,7 +5,21 @@ const cryptocurrencies = [
     { id: 'binancecoin', symbol: 'bnb', name: 'Binance Coin', icon: 'fab fa-btc' },
     { id: 'cardano', symbol: 'ada', name: 'Cardano', icon: 'fab fa-cc-visa' },
     { id: 'dogecoin', symbol: 'doge', name: 'Dogecoin', icon: 'fab fa-dogecoin' },
-    { id: 'tether', symbol: 'usdt', name: 'Tether', icon: 'fas fa-coins' }, // Добавляем USDT
+    { id: 'tether', symbol: 'usdt', name: 'Tether', icon: 'fas fa-coins' },
+    { id: 'ripple', symbol: 'xrp', name: 'XRP', icon: 'fab fa-cc-ripple' },
+    { id: 'solana', symbol: 'sol', name: 'Solana', icon: 'fas fa-sun' },
+    { id: 'polkadot', symbol: 'dot', name: 'Polkadot', icon: 'fas fa-circle' },
+    { id: 'litecoin', symbol: 'ltc', name: 'Litecoin', icon: 'fab fa-ltc' },
+    { id: 'chainlink', symbol: 'link', name: 'Chainlink', icon: 'fas fa-link' },
+    { id: 'stellar', symbol: 'xlm', name: 'Stellar', icon: 'fas fa-star' },
+    { id: 'uniswap', symbol: 'uni', name: 'Uniswap', icon: 'fas fa-exchange-alt' },
+    { id: 'avalanche-2', symbol: 'avax', name: 'Avalanche', icon: 'fas fa-snowflake' },
+    { id: 'cosmos', symbol: 'atom', name: 'Cosmos', icon: 'fas fa-atom' },
+    { id: 'monero', symbol: 'xmr', name: 'Monero', icon: 'fas fa-shield-alt' },
+    { id: 'algorand', symbol: 'algo', name: 'Algorand', icon: 'fas fa-cogs' },
+    { id: 'vechain', symbol: 'vet', name: 'VeChain', icon: 'fas fa-link' },
+    { id: 'filecoin', symbol: 'fil', name: 'Filecoin', icon: 'fas fa-hdd' },
+    { id: 'theta-token', symbol: 'theta', name: 'Theta Network', icon: 'fas fa-video' },
 ];
 
 // Функция для загрузки данных о ценах

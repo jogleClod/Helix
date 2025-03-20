@@ -13,16 +13,48 @@ document.addEventListener("DOMContentLoaded", function () {
         loadCryptoChart("cardano", "adaChart", "#0d1e30"); // Cardano
     }
 
-    // Подключаем обработчик для формы регистрации
-    const form = document.querySelector(".form");
-    if (form) {
-        form.addEventListener("submit", function (event) {
-            event.preventDefault(); // Остановить стандартную отправку формы
+    // Проверяем, авторизован ли пользователь (только на странице home.html)
+    if (window.location.pathname.endsWith("home.html")) {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+            // Пользователь авторизован, ничего не делаем
+        } else {
+            // Пользователь не авторизован, перенаправляем на страницу входа
+            window.location.href = "index.html";
+        }
+    }
+
+    // Подключаем обработчики для форм
+    const registerForm = document.getElementById("registerForm");
+    if (registerForm) {
+        registerForm.addEventListener("submit", function (event) {
+            event.preventDefault();
             registerUser();
         });
     }
+
+    // Обработчик для кнопки профиля
+    const profileButton = document.getElementById("profileButton");
+    if (profileButton) {
+        profileButton.addEventListener("click", function () {
+            // Проверяем, авторизован ли пользователь
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                window.location.href = "profile.html"; // Перенаправляем на страницу профиля
+            } else {
+                alert("Сначала войдите в систему!");
+                window.location.href = "index.html"; // Перенаправляем на страницу входа
+            }
+        });
+    }
+
+    // Загружаем данные профиля, если находимся на странице профиля
+    if (window.location.pathname.endsWith("profile.html")) {
+        loadProfile();
+    }
 });
 
+// Функция для загрузки графиков
 function loadCryptoChart(coinId, chartId, borderColor) {
     fetch(`https://api.coingecko.com/api/v3/coins/${coinId}/market_chart?vs_currency=usd&days=7`)
         .then((response) => response.json())
@@ -82,19 +114,155 @@ function loadCryptoChart(coinId, chartId, borderColor) {
         .catch((error) => console.error("Ошибка загрузки данных:", error));
 }
 
-// Функция регистрации
+// Функция для проверки пароля
+function validatePassword(password) {
+    const minLength = 5;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    if (password.length < minLength) {
+        return "Пароль должен содержать минимум 5 символов.";
+    }
+    if (!hasUpperCase) {
+        return "Пароль должен содержать хотя бы одну заглавную букву.";
+    }
+    if (!hasNumber) {
+        return "Пароль должен содержать хотя бы одну цифру.";
+    }
+    if (!hasSpecialChar) {
+        return "Пароль должен содержать хотя бы один специальный символ (!@#$%^&*).";
+    }
+    return null; // Пароль валиден
+}
+
+// Функция для регистрации
 function registerUser() {
-    let username = document.getElementById("username").value.trim();
-    let password = document.getElementById("password").value.trim();
+    const username = document.getElementById("registerUsername").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value.trim();
+
+    if (!username || !email || !password) {
+        alert("Заполните все поля!");
+        return;
+    }
+
+    // Проверяем пароль
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+        alert(passwordError);
+        return;
+    }
+
+    // Проверяем, существует ли пользователь
+    const existingUser = JSON.parse(localStorage.getItem("user"));
+    if (existingUser && existingUser.username === username) {
+        alert("Пользователь с таким логином уже существует!");
+        return;
+    }
+
+    // Сохраняем пользователя в localStorage
+    const user = { username, email, password };
+    localStorage.setItem("user", JSON.stringify(user));
+    alert("Регистрация прошла успешно!");
+    window.location.href = "home.html"; // Перенаправляем на страницу входа
+}
+
+// Функция для входа
+function loginUser() {
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
 
     if (!username || !password) {
         alert("Заполните все поля!");
         return;
     }
 
-    // Имитация успешной регистрации (можно добавить отправку данных на сервер)
-    alert("Вы успешно зарегистрированы!");
+    // Проверяем данные пользователя
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.username === username && user.password === password) {
+        alert(`Добро пожаловать, ${username}!`);
+        window.location.href = "home.html"; // Перенаправляем на главную страницу
+    } else {
+        alert("Неверный логин или пароль!");
+    }
+}
 
-    // Перенаправление на страницу входа
-    window.location.href = "home.html";
+// Функция для загрузки данных профиля
+function loadProfile() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const profileInfo = document.getElementById("profileInfo");
+
+    if (user && profileInfo) {
+        profileInfo.innerHTML = `
+            <p><strong>Имя:</strong> ${user.username}</p>
+            <p><strong>Почта:</strong> ${user.email}</p>
+        `;
+    } else {
+        alert("Пользователь не авторизован!");
+        window.location.href = "index.html"; // Перенаправляем на страницу входа
+    }
+}
+
+// Функция для выхода
+function logout() {
+    localStorage.removeItem("user");
+    alert("Вы успешно вышли из системы.");
+    window.location.href = "index.html"; // Перенаправляем на страницу входа
+}   
+document.addEventListener("DOMContentLoaded", function () {
+    // Загружаем данные о криптовалютах
+    loadCryptoData();
+
+    // Загружаем новости (если нужно)
+    loadNews();
+});
+
+// Функция для загрузки данных о криптовалютах
+function loadCryptoData() {
+    const apiUrl = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,cardano";
+
+    fetch(apiUrl)
+        .then((response) => response.json())
+        .then((data) => {
+            // Обновляем карточки с данными
+            updateCard("btcCard", data.find((coin) => coin.id === "bitcoin"));
+            updateCard("ethCard", data.find((coin) => coin.id === "ethereum"));
+            updateCard("adaCard", data.find((coin) => coin.id === "cardano"));
+        })
+        .catch((error) => {
+            console.error("Ошибка загрузки данных:", error);
+            alert("Не удалось загрузить данные о криптовалютах.");
+        });
+}
+
+// Функция для обновления карточки
+function updateCard(cardId, coinData) {
+    const card = document.getElementById(cardId);
+    if (!card || !coinData) return;
+
+    const priceElement = card.querySelector(".price");
+    const changeElement = card.querySelector(".change");
+
+    if (priceElement) {
+        priceElement.textContent = `$${coinData.current_price.toFixed(2)}`;
+    }
+
+    if (changeElement) {
+        const change = coinData.price_change_percentage_24h;
+        changeElement.textContent = `${change.toFixed(2)}% за 24ч`;
+        changeElement.classList.toggle("positive", change >= 0);
+        changeElement.classList.toggle("negative", change < 0);
+    }
+}
+
+// Функция для загрузки новостей (пример)
+function loadNews() {
+    const newsCard = document.getElementById("newsCard");
+    if (!newsCard) return;
+
+    const newsElement = newsCard.querySelector(".news");
+    if (newsElement) {
+        newsElement.textContent = "Криптовалютный рынок продолжает расти.";
+    }
 }
