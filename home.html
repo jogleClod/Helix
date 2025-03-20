@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- Верхняя панель -->
+    <header class="top-bar">
+        <div class="logo">
+            <span>Helix</span> <!-- Текстовый логотип -->
+        </div>
+        <div class="language-switcher">
+            <button id="languageButton">EN</button> <!-- Кнопка смены языка -->
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <div class="content">
+            <h2>Добро пожаловать!</h2>
+            <p>Здесь вы можете узнать актуальную информацию о криптовалютах, рынках и многом другом.</p>
+
+            <!-- Карточки с новостями и графиками -->
+            <div class="cards-container">
+                <!-- Карточка 1: Bitcoin -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fab fa-bitcoin"></i>
+                        <h3>Bitcoin (BTC)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="price">$50,000</p>
+                        <p class="change positive">+2.5% за 24ч</p>
+                        <p class="news">Bitcoin продолжает расти благодаря институциональным инвесторам.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 2: Ethereum -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fab fa-ethereum"></i>
+                        <h3>Ethereum (ETH)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="price">$3,500</p>
+                        <p class="change negative">-1.2% за 24ч</p>
+                        <p class="news">Ethereum готовится к обновлению сети.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 3: Cardano -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Cardano (ADA)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="price">$2.50</p>
+                        <p class="change positive">+3.8% за 24ч</p>
+                        <p class="news">Cardano запускает новые смарт-контракты.</p>
+                    </div>
+                </div>
+
+                <!-- Карточка 4: Новости -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>Новости</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="news">Криптовалютный рынок достиг $2 трлн капитализации.</p>
+                        <p class="news">Binance запускает новые торговые пары.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="home.html"><i class="fas fa-home"></i><span>Главная</span></a></li>
+            <li class="nav-item"><a href="prices.html"><i class="fas fa-coins"></i><span>Цены</span></a></li>
+            <li class="nav-item"><a href="staiking.html"><i class="fas fa-coins"></i><span>Стейкинг</span></a></li>
+            <li class="nav-item"><a href="graphics.html"><i class="fas fa-chart-line"></i><span>График</span></a></li>
+            <li class="nav-item"><a href="wallet.html"><i class="fas fa-wallet"></i><span>Кошелек</span></a></li>
+        </ul>
+    </nav>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

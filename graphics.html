@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Графики</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Верхняя панель -->
+    <header class="top-bar">
+        <div class="logo">
+            <span>Helix</span> <!-- Текстовый логотип -->
+        </div>
+        <div class="language-switcher">
+            <button id="languageButton">EN</button> <!-- Кнопка смены языка -->
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <div class="content">
+            <h2>Графики цен криптовалют</h2>
+            <p>Актуальные графики цен для топовых криптовалют.</p>
+
+            <!-- График Bitcoin -->
+            <div class="chart-card">
+                <h3><i class="fab fa-bitcoin"></i> Bitcoin (BTC)</h3>
+                <div class="chart-container">
+                    <canvas id="btcChart"></canvas>
+                </div>
+            </div>
+
+            <!-- График Ethereum -->
+            <div class="chart-card">
+                <h3><i class="fab fa-ethereum"></i> Ethereum (ETH)</h3>
+                <div class="chart-container">
+                    <canvas id="ethChart"></canvas>
+                </div>
+            </div>
+
+            <!-- График Binance Coin -->
+            <div class="chart-card">
+                <h3><i class="fab fa-btc"></i> Binance Coin (BNB)</h3>
+                <div class="chart-container">
+                    <canvas id="bnbChart"></canvas>
+                </div>
+            </div>
+
+            <!-- График Cardano -->
+            <div class="chart-card">
+                <h3><i class="fab fa-cc-visa"></i> Cardano (ADA)</h3>
+                <div class="chart-container">
+                    <canvas id="adaChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <ul class="nav-list">
+            <li class="nav-item"><a href="home.html"><i class="fas fa-home"></i><span>Главная</span></a></li>
+            <li class="nav-item"><a href="prices.html"><i class="fas fa-coins"></i><span>Цены</span></a></li>
+            <li class="nav-item"><a href="staiking.html"><i class="fas fa-coins"></i><span>Стейкинг</span></a></li>
+            <li class="nav-item"><a href="graphics.html"><i class="fas fa-chart-line"></i><span>График</span></a></li>
+            <li class="nav-item"><a href="wallet.html"><i class="fas fa-wallet"></i><span>Кошелек</span></a></li>
+        </ul>
+    </nav>
+    <script src="js/script.js"></script>
+</body>
+</html>
