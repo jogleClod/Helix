@@ -172,7 +172,7 @@
                 <label for="amount">Сумма:</label>
                 <input type="number" id="amount" placeholder="Введите сумму" required>
 
-                <p id="feeInfo">Комиссия: <span id="feeAmount">0.0005 BTC</span></p>
+                <p id="feeInfo">Комиссия: <span id="feeAmount">0.0000 BTC</span></p>
 
                 <!-- Сообщение об ошибке -->
                 <div id="errorMessage" class="error-message">Неверный адрес кошелька!</div>
@@ -188,8 +188,8 @@
     <div class="dialog-content">
         <span class="close" onclick="closePaymentDialog()">&times;</span>
         <h3>Выберите способ оплаты</h3>
-        <button class="payment-option" onclick="selectPayment('TRC20')">TRC20</button>
-        <button class="payment-option" onclick="selectPayment('ERC20')">ERC20</button>
+        <button class="payment-option" onclick="selectPayment('TRC20')">USDT(TRC20)</button>
+        <button class="payment-option" onclick="selectPayment('ERC20')">USDT(ERC20)</button>
     </div>
 </div>
 
@@ -199,7 +199,7 @@
         <span class="close" onclick="closeQrDialog()">&times;</span>
         <h3 id="qrDialogTitle">Оплата через TRC20</h3>
         <div id="qrCode"></div>
-        <p id="walletAddress">Адрес кошелька нажмите для копирования: <span id="address"></span></p>
+        <p id="walletAddress">Адрес кошелька: <span id="address"></span></p>
         <button class="payment-option" onclick="closeQrDialog()">Закрыть</button>
     </div>
 </div>

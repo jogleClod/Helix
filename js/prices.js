@@ -18,7 +18,7 @@ async function loadPrices() {
 
     try {
         // Добавляем задержку в 1 секунду перед запросом
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
 
         const response = await fetch(apiUrl);
         const data = await response.json();
